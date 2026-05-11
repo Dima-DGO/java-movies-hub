@@ -15,7 +15,7 @@ import java.util.List;
 abstract class BaseHttpHandler implements HttpHandler {
     protected static final String CT_JSON = "application/json; charset=UTF-8";
 
-    protected final Gson GSON = new Gson();
+    protected final Gson gson = new Gson();
 
     protected void sendError(HttpExchange ex, int statusCode, String message)
             throws IOException {
@@ -24,7 +24,7 @@ abstract class BaseHttpHandler implements HttpHandler {
 
     protected void sendError(HttpExchange ex, int statusCode, String message,
                              List<String> details) throws IOException {
-        String jsonError = GSON.toJson(new ErrorResponse(message, details));
+        String jsonError = gson.toJson(new ErrorResponse(message, details));
         sendJson(ex, statusCode, jsonError);
     }
 

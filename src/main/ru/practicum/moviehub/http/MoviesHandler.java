@@ -61,7 +61,7 @@ public class MoviesHandler extends BaseHttpHandler {
                 try {
                     int year = Integer.parseInt(query.substring(5));
                     List<Movie> movies = store.getByYear(year);
-                    String json = GSON.toJson(movies);
+                    String json = gson.toJson(movies);
                     sendJson(ex, 200, json);
                     return;
                 } catch (NumberFormatException e) {
@@ -71,7 +71,7 @@ public class MoviesHandler extends BaseHttpHandler {
             }
 
             List<Movie> movies = store.getAll();
-            String json = GSON.toJson(movies);
+            String json = gson.toJson(movies);
             sendJson(ex, 200, json);
 
         } else if (path.startsWith("/movies/")) {
@@ -81,7 +81,7 @@ public class MoviesHandler extends BaseHttpHandler {
                 long id = Long.parseLong(idStr);
                 Optional<Movie> movie = store.getById(id);
                 if (movie.isPresent()) {
-                    sendJson(ex, 200, GSON.toJson(movie.get()));
+                    sendJson(ex, 200, gson.toJson(movie.get()));
                 } else {
                     sendError(ex, 404, "Фильм с ID " + id + " не найден");
                 }
@@ -133,7 +133,7 @@ public class MoviesHandler extends BaseHttpHandler {
 
         Movie movieFromRequest;
         try {
-            movieFromRequest = GSON.fromJson(jsonBody, Movie.class);
+            movieFromRequest = gson.fromJson(jsonBody, Movie.class);
         } catch (JsonSyntaxException e) {
             sendError(ex, 400, "Некорректный формат JSON");
             return;
@@ -163,7 +163,7 @@ public class MoviesHandler extends BaseHttpHandler {
 
         Movie createdMovie = store.add(movieFromRequest.getTitle(), movieFromRequest.getYear());
 
-        sendJson(ex, 201, GSON.toJson(createdMovie));
+        sendJson(ex, 201, gson.toJson(createdMovie));
     }
 
     private void handleDelete(HttpExchange ex, String path) throws IOException {
