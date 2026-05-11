@@ -1,6 +1,5 @@
 package ru.practicum.moviehub.http;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import ru.practicum.moviehub.model.Movie;
@@ -21,7 +20,6 @@ import com.google.gson.JsonParser;
 
 public class MoviesHandler extends BaseHttpHandler {
     private final MoviesStore store;
-    private static final Gson GSON = BaseHttpHandler.GSON;
 
     public MoviesHandler(MoviesStore store) {
         this.store = store;
@@ -52,25 +50,6 @@ public class MoviesHandler extends BaseHttpHandler {
             sendError(ex, 400, "ID в пути должен быть числом");
         } catch (Exception e) {
             sendError(ex, 500, "Внутренняя ошибка сервера");
-        }
-    }
-
-    private void validateMovieJson(String jsonBody) throws IOException {
-        try {
-            JsonElement element = JsonParser.parseString(jsonBody);
-            if (!element.isJsonObject()) {
-                throw new IllegalArgumentException("JSON должен быть объектом");
-            }
-            JsonObject obj = element.getAsJsonObject();
-
-            if (!obj.has("title") || !obj.has("year")) {
-                throw new IllegalArgumentException("Отсутствуют обязательные поля: title, year");
-            }
-            if (!obj.get("title").isJsonPrimitive() || !obj.get("year").isJsonPrimitive()) {
-                throw new IllegalArgumentException("Поля title и year должны быть примитивами");
-            }
-        } catch (JsonSyntaxException e) {
-            throw new IllegalArgumentException("Некорректный формат JSON", e);
         }
     }
 

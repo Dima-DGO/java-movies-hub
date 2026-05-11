@@ -15,7 +15,7 @@ import java.util.List;
 abstract class BaseHttpHandler implements HttpHandler {
     protected static final String CT_JSON = "application/json; charset=UTF-8";
 
-    protected static final Gson GSON = new Gson();
+    protected final Gson GSON = new Gson();
 
     protected void sendError(HttpExchange ex, int statusCode, String message)
             throws IOException {
